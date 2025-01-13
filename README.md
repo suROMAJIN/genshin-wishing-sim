@@ -1,6 +1,6 @@
 # Genshin Impact Wish Simulator
 
-This React application simulates the wishing mechanism from _Genshin Impact_, allowing users to experience the process of making wishes and receiving items or characters as in the game. The app uses the [genshin.dev API](https://genshin.dev/) for fetching character and item data and media resources sourced from [this repository](https://github.com/shadorki/genshin-impact-wish-simulator/tree/master).
+This React application simulates the wishing mechanism from _Genshin Impact_, allowing users to experience the process of making wishes and receiving items or characters as in the game. The app uses the [genshin.dev API](https://genshin.dev/) for fetching character and item data and media resources sourced from [this repository](https://github.com/Mantan21/Genshin-Impact-Wish-Simulator).
 
 ## Features
 
@@ -13,14 +13,14 @@ This React application simulates the wishing mechanism from _Genshin Impact_, al
 
 - **React**: JavaScript library for building user interfaces.
 - **genshin.dev API**: Provides game data such as character and weapon information.
-- **Media resources**: Sourced from [shadorki's repository](https://github.com/shadorki/genshin-impact-wish-simulator/tree/master).
+- **Media resources**: Sourced from [Mantan21's repository](https://github.com/Mantan21/Genshin-Impact-Wish-Simulator).
 
 ## Installation
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/genshin-impact-wish-simulator.git
+   git clone https://github.com/suROMAJIN/genshin-impact-wish-simulator.git
    ```
 
 2. Navigate into the project directory:
