@@ -1,4 +1,6 @@
-export const fetchData = async <T>(endPoint: string): Promise<T | null> => {
+//const GENSHIN_API = "https://genshin.jmp.blue/";
+
+const fetchData = async <T>(endPoint: string): Promise<T | null> => {
   try {
     const response = await fetch(endPoint);
     if (!response.ok) {
@@ -13,3 +15,5 @@ export const fetchData = async <T>(endPoint: string): Promise<T | null> => {
     return null;
   }
 };
+
+export default fetchData;

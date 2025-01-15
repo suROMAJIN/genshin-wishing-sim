@@ -1,18 +1,49 @@
-import { useState } from "react";
+/* 
+TODO
+1. Only body is responsive, refactor flex:grow to header and footer also
+2. Develop the switch from page to wish animation to result page
 
+*/
+import { useState } from "react";
+import Header from "./components/Header";
+import Body from "./components/Body";
+import Footer from "./components/Footer";
+
+//! TEMPORARY Setup for Banners and Wishes
 const banners = [
   { id: 1, image: "src/assets/banners/wanderlust-invocation-2.webp" },
   { id: 2, image: "src/assets/banners/epitome-invocation-1.webp" },
 ];
 
+const wishAnimations = [
+  { id: 1, video: "src/assets/3star-single.mp4" },
+  { id: 2, video: "src/assets/4star-single.mp4" },
+  { id: 3, video: "src/assets/5star-single.mp4" },
+];
+
 function App() {
-  //* Banner ID #1 is weapon banner, banner #2 is character banner
+  const [wishCount, setWishCount] = useState(0); //* Banner ID #1 is weapon banner, banner #2 is character banner
   //* in useState use index numbering so banner #1 is accessed in useState(0)
   const [currentBanner, setBanner] = useState(0);
+  // const [isWishing, setIsWishing] = useState(false);
+  // const [currentAnimation, setCurrentAnimation] = useState("");
 
-  const toggleBanner = () => {
-    setBanner((prev) => (prev === 0 ? 1 : 0));
-  };
+  // const startWish = (wishType: string) => {
+  //   const animation = wishAnimations[wishType];
+  //   if (animation) {
+  //     setCurrentAnimation(animation);
+  //     setIsWishing(true);
+  //   }
+  // };
+
+  // const stopWish = () => {
+  //   setIsWishing(false);
+  //   setCurrentAnimation("");
+  // };
+
+  // const toggleBanner = () => {
+  //   setBanner((prev) => (prev === 0 ? 1 : 0));
+  // };
 
   return (
     <>
@@ -29,49 +60,26 @@ function App() {
           />
           Your browser does not support the video tag.
         </video>
-
-        {/* Header with Banner Preview Buttons */}
-        <header className="relative z-10 flex justify-center mt-4">
-          <button
-            onClick={() => setBanner(0)}
-            className={`mx-2 py-1 px-0.5 rounded ${
-              currentBanner === 0 ? "bg-blue-700 text-white" : "bg-gray-300"
-            }`}
-          >
-            Standard Banner
-          </button>
-
-          <button
-            onClick={() => setBanner(1)}
-            className={`mx-2 py-1 px-0.5 rounded ${
-              currentBanner === 1 ? "bg-blue-700 text-white" : "bg-gray-300"
-            }`}
-          >
-            Weapon Banner
-          </button>
-        </header>
-
-        {/* Banner Preview Section with Sliding Effect */}
-        <main className="relative z-10 flex flex-col items-center justify-center mt-4">
-          <div className="relative w-full max-w-md">
-            <img
-              src={banners[currentBanner].image}
-              alt={`Banner ${currentBanner + 1}`}
-              className="w-full"
+        <Header currentBanner={currentBanner} setBanner={setBanner} />
+        <Body currentBanner={currentBanner} banners={banners} />
+        <Footer wishCount={wishCount} currentBanner={currentBanner} />
+        //! PART in development: Wishing Animation
+        {/* {isWishing ? (
+          <div className="relative z-10 flex items-center justify-center w-full h-full">
+            <video
+              src={currentAnimation}
+              autoPlay
+              className="w-full h-full object-contain"
+              onEnded={stopWish}
             />
           </div>
-        </main>
-
-        <footer className="relative z-10 flex justify-end mt-4 p-4">
-          <div className="flex flex-row items-end">
-            <button className="my-1 mx-1 py-1 px-1 bg-gray-400 text-white rounded">
-              Wish 1x
-            </button>
-            <button className="my-1 mx-1 py-1 px-1 bg-gray-400 text-white rounded">
-              Wish 10x
-            </button>
-          </div>
-        </footer>
+        ) : (
+          <>
+            <Header currentBanner={currentBanner} setBanner={setBanner} />
+            <Body currentBanner={currentBanner} banners={banners} />
+            <Footer startWish={startWish} />
+          </>
+        )} */}
       </div>
     </>
   );
