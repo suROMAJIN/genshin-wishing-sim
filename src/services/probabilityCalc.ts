@@ -48,10 +48,10 @@ export function getWishResult(
 
 /**
  * Returns whether the pulled item is a character or a weapon.
- * You can adjust probabilities or just pick based on bannerType, etc.
+ * Adjustable probabilities or can pick based on bannerType, etc.
  */
 function getRandomType(
-  bannerType: "character" | "weapon",
+  bannerType: string,
   rarity: number
 ): "character" | "weapon" {
   // For simplicity, if banner is "character," favor characters at 4★/5★
@@ -60,7 +60,7 @@ function getRandomType(
     // E.g., a small chance the 4★ or 5★ is actually a weapon
     const roll = Math.random();
     // Adjust these probabilities to your liking
-    if (roll < 0.2) return "weapon";
+    if (roll < 0.94) return "weapon";
     return "character";
   } else {
     // For weapon banner, it’s mostly weapons, but a small chance for a character

@@ -1,30 +1,30 @@
 import React from "react";
 
 interface HeaderProps {
-  currentBanner: number;
-  setBanner: (banner: number) => void;
+  selectedBanner: "character" | "standard";
+  onSelectBanner: (banner: "character" | "standard") => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentBanner, setBanner }) => {
+const Header: React.FC<HeaderProps> = ({ selectedBanner, onSelectBanner }) => {
   return (
-    <header className="relative z-10 flex justify-center p-5 ">
+    <div className="absolute top-0 w-full flex justify-center gap-4 p-4 z-10">
       <button
-        onClick={() => setBanner(0)}
-        className={`mx-2 py-2 px-1 rounded ${
-          currentBanner === 0 ? "bg-blue-500 text-white" : "bg-gray-300"
-        }`}
+        className={`px-4 py-2 text-white ${
+          selectedBanner === "character" ? "bg-blue-500" : "bg-gray-700"
+        } rounded`}
+        onClick={() => onSelectBanner("character")}
+      >
+        Character Banner
+      </button>
+      <button
+        className={`px-4 py-2 text-white ${
+          selectedBanner === "standard" ? "bg-blue-500" : "bg-gray-700"
+        } rounded`}
+        onClick={() => onSelectBanner("standard")}
       >
         Standard Banner
       </button>
-      <button
-        onClick={() => setBanner(1)}
-        className={`mx-2 py-2 px-1 rounded ${
-          currentBanner === 1 ? "bg-blue-400 text-white" : "bg-gray-300"
-        }`}
-      >
-        Weapon Banner
-      </button>
-    </header>
+    </div>
   );
 };
 
