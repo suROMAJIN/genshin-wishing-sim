@@ -1,6 +1,6 @@
 export interface WishResult {
   rarity: number; // 3, 4, or 5
-  type: "character" | "weapon";
+  type: "standard" | "weapon";
 }
 
 /**
@@ -30,8 +30,8 @@ export function getWishResult(
   // Example: character banner => 0.6% for 5★, 5.1% for 4★, 94.3% for 3★
   // Example: weapon banner => 0.7% for 5★, 6.0% for 4★, 93.3% for 3★
   // Here, we pick rates depending on bannerType:
-  let fiveStarRate = bannerType === "character" ? 0.6 : 0.7;
-  let fourStarRate = bannerType === "character" ? 5.1 : 6.0;
+  let fiveStarRate = bannerType === "standard" ? 0.6 : 0.7;
+  let fourStarRate = bannerType === "standard" ? 5.1 : 6.0;
   // Convert to fraction
   fiveStarRate /= 100;
   fourStarRate /= 100;
@@ -53,15 +53,15 @@ export function getWishResult(
 function getRandomType(
   bannerType: string,
   rarity: number
-): "character" | "weapon" {
+): "standard" | "weapon" {
   // For simplicity, if banner is "character," favor characters at 4★/5★
   // or do a random check. Customize as needed.
-  if (bannerType === "character") {
+  if (bannerType === "standard") {
     // E.g., a small chance the 4★ or 5★ is actually a weapon
     const roll = Math.random();
     // Adjust these probabilities to your liking
     if (roll < 0.94) return "weapon";
-    return "character";
+    return "standard";
   } else {
     // For weapon banner, it’s mostly weapons, but a small chance for a character
     // const roll = Math.random();
