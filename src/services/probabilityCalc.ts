@@ -1,7 +1,45 @@
-export interface WishResult {
-  rarity: number; // 3, 4, or 5
-  type: "character" | "weapon";
+/*
+ TODO: Reset four-star pity, logic can be implemented to reset only if 4 star is pulled
+*/
+import WishResult from "@interfaces/WishResult"
+
+interface userInputProbabilityCalcProp {
+  bannerType: string;
+  pityCounter: {
+    allWishCounts: number;
+    fiveStarPity: number;
+    fourStarPity: number;
+  };
 }
+
+/**
+ * Returns whether the pulled item is a character or a weapon.
+ * Adjustable probabilities or can pick based on bannerType, etc.
+ */
+const getRandomType = (
+  bannerType: string,
+ // rarity: number
+): string => {
+  // For simplicity, if banner is "character," favor characters at 4★/5★
+  // or do a random check. Customize as needed.
+  if (bannerType === "standard") {
+    // E.g., a small chance the 4★ or 5★ is actually a weapon
+    const roll = Math.random();
+    // Adjust these probabilities in the future, this is a 6% chance for weapon
+    if (roll > 0.94) return "weapon";
+    return "character";
+  } else if (bannerType === "weapon") {
+    // For weapon banner, it’s mostly weapons, but a small chance for a character
+    // const roll = Math.random();
+    // if (roll < 0.2) return "character";
+    return "weapon";
+  } else {
+      // for now this segments gonna handle if in the future additional banners are added 
+      return "character";
+    }
+}
+
+
 
 /**
  *@param bannerType "character" or "weapon"
@@ -9,20 +47,37 @@ export interface WishResult {
  * @param pity5star Number of pulls since last 5★
  * @returns WishResult with rarity of 3, 4, or 5, and type "character" or "weapon"
  */
-export function getWishResult(
-  //bannerType: "character" | "weapon",
-  bannerType: string,
-  wishCount: number
-): WishResult {
-  // Handle guaranteed pity
-  if (wishCount >= 79) {
-    // Guaranteed 5★ on 80th pull
-    return { rarity: 5, type: getRandomType(bannerType, 5) };
+const getCalculatedWishOutput = ({
+  bannerType,
+  pityCounter,
+}: userInputProbabilityCalcProp): WishResult => {
+
+  // Handle guaranteed 5 star pity
+  if (pityCounter.fiveStarPity >= 79) {
+    return {
+      bannerType,
+      rarity: 5,
+      type: getRandomType(bannerType),
+      //itemName: "None at this moment in the program, these data will be passed to the API hook useWishing
+      pityCounter: {
+        allWishCounts: pityCounter.allWishCounts + 1,
+        fiveStarPity: 0, // Reset five-star pity
+        fourStarPity: 0, // Reset four-star pity
+      },
+    };
   }
-  if (wishCount >= 9) {
-    // Guaranteed 4★ or better on 10th pull
-    // 4★ check here; 5★ still possible but for simplicity, we do 4★
-    return { rarity: 4, type: getRandomType(bannerType, 4) };
+
+  if (pityCounter.fourStarPity >= 9) {
+    return {
+      bannerType,
+      rarity: 4,
+      type: getRandomType(bannerType),
+      pityCounter: {
+        allWishCounts: pityCounter.allWishCounts + 1,
+        fiveStarPity: pityCounter.fiveStarPity + 1,
+        fourStarPity: 0, // Reset four-star pity
+      },
+    };
   }
 
   // Normal probability rolls
@@ -30,42 +85,51 @@ export function getWishResult(
   // Example: character banner => 0.6% for 5★, 5.1% for 4★, 94.3% for 3★
   // Example: weapon banner => 0.7% for 5★, 6.0% for 4★, 93.3% for 3★
   // Here, we pick rates depending on bannerType:
-  let fiveStarRate = bannerType === "character" ? 0.6 : 0.7;
-  let fourStarRate = bannerType === "character" ? 5.1 : 6.0;
-  // Convert to fraction
-  fiveStarRate /= 100;
-  fourStarRate /= 100;
+  // For now and for future banners, it will assume the right argument values
+  let fiveStarRate = bannerType === "standard" ? 0.006 : 0.007; // 0.6% and 0.7%
+  let fourStarRate = bannerType === "standard" ? 0.051 : 0.060; // 5.1% and 6.0%
 
-  const roll = Math.random();
-  if (roll < fiveStarRate) {
-    return { rarity: 5, type: getRandomType(bannerType, 5) };
-  } else if (roll < fiveStarRate + fourStarRate) {
-    return { rarity: 4, type: getRandomType(bannerType, 4) };
-  } else {
-    return { rarity: 3, type: getRandomType(bannerType, 3) };
+
+  const roll = Number(Math.random().toFixed(3));
+  if (roll <= fiveStarRate) {
+  return {
+    bannerType,
+    rarity: 5,
+    type: getRandomType(bannerType),
+    //itemName: "5★ Item", // Replace with actual item name logic
+    pityCounter: {
+      allWishCounts: pityCounter.allWishCounts + 1,
+      fiveStarPity: 0, // Reset five-star pity
+      fourStarPity: 0, // Reset four-star pity, logic can be implemented to reset only if 4 star is pulled
+    },
+  };
+} 
+
+  else if (roll <= fiveStarRate + fourStarRate) {
+    return {
+      bannerType,
+      rarity: 4,
+      type: getRandomType(bannerType),
+      pityCounter: {
+        allWishCounts: pityCounter.allWishCounts + 1,
+        fiveStarPity: pityCounter.fiveStarPity + 1,
+        fourStarPity: 0, // Reset four-star pity
+      },
+    };
+  }
+
+  else {
+    return {
+      bannerType,
+      rarity: 3,
+      type: getRandomType(bannerType),
+      pityCounter: {
+        allWishCounts: pityCounter.allWishCounts + 1,
+        fiveStarPity: pityCounter.fiveStarPity + 1,
+        fourStarPity: pityCounter.fourStarPity + 1,
+      },
+    };
   }
 }
 
-/**
- * Returns whether the pulled item is a character or a weapon.
- * You can adjust probabilities or just pick based on bannerType, etc.
- */
-function getRandomType(
-  bannerType: "character" | "weapon",
-  rarity: number
-): "character" | "weapon" {
-  // For simplicity, if banner is "character," favor characters at 4★/5★
-  // or do a random check. Customize as needed.
-  if (bannerType === "character") {
-    // E.g., a small chance the 4★ or 5★ is actually a weapon
-    const roll = Math.random();
-    // Adjust these probabilities to your liking
-    if (roll < 0.2) return "weapon";
-    return "character";
-  } else {
-    // For weapon banner, it’s mostly weapons, but a small chance for a character
-    // const roll = Math.random();
-    // if (roll < 0.2) return "character";
-    return "weapon";
-  }
-}
+export default getCalculatedWishOutput;
