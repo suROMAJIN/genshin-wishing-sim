@@ -16,7 +16,7 @@ const Body: React.FC<BodyProps> = ({ selectedBanner }) => {
       // Update the current image after fade out
       setCurrentImage(selectedBanner === "standard" ? standardBanner : weaponBanner);
       setIsFadingIn(false);
-    }, 800); // Match this duration with  CSS transition duration
+    }, 500); // Match this duration with  CSS transition duration
 
     return () => clearTimeout(timer);
   }, [selectedBanner]);
@@ -28,7 +28,7 @@ const Body: React.FC<BodyProps> = ({ selectedBanner }) => {
         <img
           src={currentImage}
           alt={`${selectedBanner} banner`}
-          className={`absolute w-full h-full object-contain rounded-lg transition-opacity duration-500 ${isFadingIn ? 'opacity-0' : 'opacity-100'}`}
+          className={`absolute w-full h-full object-contain rounded-lg transition-opacity   ${isFadingIn ? 'opacity-0' : 'opacity-100'}`}
         />
         
         {/* New image (fades in smoothly) */}

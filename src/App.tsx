@@ -13,20 +13,11 @@ import React, { useState } from "react";
 import BackgroundVideo from "@components/BackgroundVideo";
 import Header from "@components/Header";
 import Body from "@components/Body";
-import Footer from "@components/Footer";
-import WishAnimation from "@components/WishAnimation";
+//import Footer from "@components/Footer";
+import WishHandler from "@components/WishHandler";
 
 const App: React.FC = () => {
   const [selectedBanner, setSelectedBanner] = useState<string>("standard");
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const handleWish = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-      alert(`You got a rare item from the ${selectedBanner} banner!`);
-    }, 7000); // Assume video duration is 6 seconds
-  };
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -36,9 +27,10 @@ const App: React.FC = () => {
         onSelectBanner={setSelectedBanner}
       />
       <Body selectedBanner={selectedBanner} />
-      <Footer onWish={handleWish} />
+      {/* <Footer onWish={handleWish} />
 
-      {isAnimating && <WishAnimation banner={selectedBanner} />}
+      {isAnimating && <WishHandler bannerType={selectedBanner} />} */}
+      <WishHandler bannerType={selectedBanner} />
     </div>
   );
 };

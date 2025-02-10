@@ -4,9 +4,10 @@ import React from "react";
 
 interface FooterProps {
   onWish: () => void;
+  selectedBanner:string;
 }
 
-const Footer: React.FC<FooterProps> = ({ onWish }) => {
+const Footer: React.FC<FooterProps> = ({ onWish, selectedBanner }) => {
   return (
     <div className="absolute bottom-0  w-full flex justify-center p-4 z-10">
       <button
