@@ -3,7 +3,7 @@
 import React from "react";
 
 interface WishAnimationProps {
-  banner: "standard" | "weapon";
+  banner: string;
 }
 
 const WishAnimation: React.FC<WishAnimationProps> = ({ banner }) => {

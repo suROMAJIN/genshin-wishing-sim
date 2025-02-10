@@ -1,8 +1,8 @@
 import React from "react";
 
 interface HeaderProps {
-  selectedBanner: "standard" | "weapon";
-  onSelectBanner: (banner: "standard" | "weapon") => void;
+  selectedBanner: string;
+  onSelectBanner: (banner:string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ selectedBanner, onSelectBanner }) => {

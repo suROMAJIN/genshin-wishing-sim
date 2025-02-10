@@ -10,16 +10,14 @@ import React, { useState } from "react";
 // Tailwind imported in index.css
 
 // Components
-import BackgroundVideo from "./components/BackgroundVideo";
-import Header from "./components/Header";
-import Body from "./components/Body";
-import Footer from "./components/Footer";
-import WishAnimation from "./components/WishAnimation";
+import BackgroundVideo from "@components/BackgroundVideo";
+import Header from "@components/Header";
+import Body from "@components/Body";
+import Footer from "@components/Footer";
+import WishAnimation from "@components/WishAnimation";
 
 const App: React.FC = () => {
-  const [selectedBanner, setSelectedBanner] = useState<
-    "character" | "standard"
-  >("character");
+  const [selectedBanner, setSelectedBanner] = useState<string>("standard");
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleWish = () => {
@@ -27,7 +25,7 @@ const App: React.FC = () => {
     setTimeout(() => {
       setIsAnimating(false);
       alert(`You got a rare item from the ${selectedBanner} banner!`);
-    }, 6000); // Assume video duration is 6 seconds
+    }, 7000); // Assume video duration is 6 seconds
   };
 
   return (
