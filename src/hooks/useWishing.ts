@@ -1,8 +1,12 @@
 import { useState } from "react";
-import fetchData from "../services/fetchAPI";
-import { getWishResult, WishResult } from "../services/probabilityCalc";
+import fetchData from "@services/fetchAPI";
 
-export const useWishing = (currentBanner: number) => {
+import getCalculatedWishOutput  from "@services/probabilityCalc";
+
+import WishResult  from "@interfaces/WishResult";
+
+
+const useWishing = (currentBanner: number) => {
   const [wishCount, setWishCount] = useState(0);
   const [isWishing, setIsWishing] = useState(false);
   const [currentAnimation, setCurrentAnimation] = useState("");
@@ -10,7 +14,7 @@ export const useWishing = (currentBanner: number) => {
   const startWish = async () => {
     setWishCount((prev) => prev + 1);
     const bannerType = currentBanner === 0 ? "character" : "weapon";
-    const wishResult: WishResult = getWishResult(bannerType, wishCount);
+    const wishResult: WishResult = getCalculatedWishOutput(bannerType, pityCounter);
 
     try {
       const endpoint =
@@ -18,6 +22,7 @@ export const useWishing = (currentBanner: number) => {
           ? "https://genshin.jmp.blue/characters"
           : "https://genshin.jmp.blue/weapons";
       const data = await fetchData<string[]>(endpoint);
+
       if (data && data.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.length);
         const itemName = data[randomIndex];
@@ -25,9 +30,11 @@ export const useWishing = (currentBanner: number) => {
           `You got a ${wishResult.rarity}-star ${wishResult.type}: ${itemName}!`
         );
         setCurrentAnimation(
-          wishResult.rarity === 5
-            ? "src/assets/5star-single.mp4"
-            : "src/assets/4star-single.mp4"
+       wishResult.rarity === 5
+        ? "src/assets/5star-single.mp4"
+          : wishResult.rarity === 4
+            ? "src/assets/4star-single.mp4"
+            : "src/assets/3star-single.mp4"
         );
         setIsWishing(true);
       } else {
@@ -46,3 +53,5 @@ export const useWishing = (currentBanner: number) => {
 
   return { wishCount, isWishing, currentAnimation, startWish, stopWish };
 };
+
+export default useWishing;
