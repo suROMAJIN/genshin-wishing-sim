@@ -1,16 +1,7 @@
 /*
  TODO: Reset four-star pity, logic can be implemented to reset only if 4 star is pulled
 */
-import WishResult from "@interfaces/WishResult"
-
-interface userInputProbabilityCalcProp {
-  bannerType: string;
-  pityCounter: {
-    allWishCounts: number;
-    fiveStarPity: number;
-    fourStarPity: number;
-  };
-}
+import WishResult from "@interfaces/WishResult";
 
 /**
  * Returns whether the pulled item is a character or a weapon.
@@ -50,8 +41,9 @@ const getRandomType = (
 const getCalculatedWishOutput = ({
   bannerType,
   pityCounter,
-}: userInputProbabilityCalcProp): WishResult => {
+}: WishResult): WishResult => {
 
+let newPityCounter = { ...pityCounter, allWishCounts: pityCounter.allWishCounts + 1 };
   // Handle guaranteed 5 star pity
   if (pityCounter.fiveStarPity >= 79) {
     return {
@@ -59,11 +51,7 @@ const getCalculatedWishOutput = ({
       rarity: 5,
       type: getRandomType(bannerType),
       //itemName: "None at this moment in the program, these data will be passed to the API hook useWishing
-      pityCounter: {
-        allWishCounts: pityCounter.allWishCounts + 1,
-        fiveStarPity: 0, // Reset five-star pity
-        fourStarPity: 0, // Reset four-star pity
-      },
+      pityCounter: { ...newPityCounter, fiveStarPity: 0, fourStarPity: 0 },
     };
   }
 
@@ -72,22 +60,20 @@ const getCalculatedWishOutput = ({
       bannerType,
       rarity: 4,
       type: getRandomType(bannerType),
-      pityCounter: {
-        allWishCounts: pityCounter.allWishCounts + 1,
-        fiveStarPity: pityCounter.fiveStarPity + 1,
-        fourStarPity: 0, // Reset four-star pity
-      },
+       pityCounter: { ...newPityCounter, fourStarPity: 0, fiveStarPity: pityCounter.fiveStarPity + 1 },
     };
   }
-
-  // Normal probability rolls
+  // Normal probability rolls sa bannners
   // Adjust these for your actual rates:
   // Example: character banner => 0.6% for 5★, 5.1% for 4★, 94.3% for 3★
   // Example: weapon banner => 0.7% for 5★, 6.0% for 4★, 93.3% for 3★
   // Here, we pick rates depending on bannerType:
   // For now and for future banners, it will assume the right argument values
-  let fiveStarRate = bannerType === "standard" ? 0.006 : 0.007; // 0.6% and 0.7%
-  let fourStarRate = bannerType === "standard" ? 0.051 : 0.060; // 5.1% and 6.0%
+  // let fiveStarRate = bannerType === "standard" ? 0.006 : 0.007; // 0.6% and 0.7%
+  // let fourStarRate = bannerType === "standard" ? 0.051 : 0.060; // 5.1% and 6.0%
+
+  let fiveStarRate = bannerType === "standard" ? 0.6 : 0.7; // 60% and 70%
+  let fourStarRate = bannerType === "standard" ? 0.3 : 0.2; // 30% and 20%
 
 
   const roll = Number(Math.random().toFixed(3));
@@ -97,11 +83,7 @@ const getCalculatedWishOutput = ({
     rarity: 5,
     type: getRandomType(bannerType),
     //itemName: "5★ Item", // Replace with actual item name logic
-    pityCounter: {
-      allWishCounts: pityCounter.allWishCounts + 1,
-      fiveStarPity: 0, // Reset five-star pity
-      fourStarPity: 0, // Reset four-star pity, logic can be implemented to reset only if 4 star is pulled
-    },
+     pityCounter: { ...newPityCounter, fiveStarPity: 0, fourStarPity: 0 },
   };
 } 
 
@@ -110,11 +92,7 @@ const getCalculatedWishOutput = ({
       bannerType,
       rarity: 4,
       type: getRandomType(bannerType),
-      pityCounter: {
-        allWishCounts: pityCounter.allWishCounts + 1,
-        fiveStarPity: pityCounter.fiveStarPity + 1,
-        fourStarPity: 0, // Reset four-star pity
-      },
+      pityCounter: { ...newPityCounter, fourStarPity: 0, fiveStarPity: pityCounter.fiveStarPity + 1 },
     };
   }
 
@@ -123,11 +101,7 @@ const getCalculatedWishOutput = ({
       bannerType,
       rarity: 3,
       type: getRandomType(bannerType),
-      pityCounter: {
-        allWishCounts: pityCounter.allWishCounts + 1,
-        fiveStarPity: pityCounter.fiveStarPity + 1,
-        fourStarPity: pityCounter.fourStarPity + 1,
-      },
+      pityCounter: { ...newPityCounter, fiveStarPity: pityCounter.fiveStarPity + 1, fourStarPity: pityCounter.fourStarPity + 1 },
     };
   }
 }
