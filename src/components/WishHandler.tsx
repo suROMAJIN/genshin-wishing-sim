@@ -1,9 +1,10 @@
 // File: src/components/WishAnimation.tsx
 
 import React, {useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 
 import Footer from "@components/Footer";
-import WishResult from "@services/interfaces/WishResult";
+
 
 import useWishing from "../hooks/useWishing";
 
@@ -14,22 +15,29 @@ interface WishHandlerProps {
 
 const WishHandler: React.FC<WishHandlerProps> = ({bannerType  }) => {
   const { wishResult, isWishing, currentAnimation, startWish, stopWish } = useWishing(bannerType);
-  
+  const navigate = useNavigate();
   // const videoSrc =
   //   bannerType === "standard"
   //     ? "src/assets/5star-single.mp4"
   //     : "src/assets/4star-single.mp4";
 
-useEffect(() => {
-    if (wishResult) {
-      setTimeout(() => {
-        alert(
-          `🎉 You got ${wishResult.rarity}-star ${wishResult.type} from the ${wishResult.bannerType} banner: ${wishResult.itemName}!`
-        );
-      }, 6000); // Delay for animation purposes
-    }
+  const nextPage = () =>{
     console.log("Wish Result:", wishResult);
-  }, [wishResult]); // Runs when wishResult updates
+    navigate("/results");
+  }
+
+// useEffect(() => {
+//     if (wishResult) {
+//       setTimeout(() => {
+//         alert(
+//           `🎉 You got ${wishResult.rarity}-star ${wishResult.type} from the ${wishResult.bannerType} banner: ${wishResult.itemName}!`
+//         );
+
+//       }, 6000); // Delay for animation purposes
+//     }
+//     console.log("Wish Result:", wishResult);
+
+//   }, [wishResult]); // Runs when wishResult updates
 
   return (
     // <div className="absolute top-0 w-full h-full z-20 flex items-center justify-center">
@@ -43,11 +51,14 @@ useEffect(() => {
  <div>
       <Footer onWish={startWish} selectedBanner={bannerType} />
       {isWishing && (
-        <div className="absolute top-0 w-full h-full z-20 flex items-center justify-center">
+        <div className="absolute top-0 w-full h-full z-20 flex items-center justify-center object-cover" >
           <video
             src={currentAnimation}
             autoPlay
-            onEnded={stopWish} // Stop wishing when the video ends
+            onEnded={()=>{
+              stopWish();
+              nextPage();
+            }} // Stop wishing when the video ends
             className="wish-animation"
             controls={false} // Hide controls if you want
             loop={false} // Play once
