@@ -23,7 +23,7 @@ const WishHandler: React.FC<WishHandlerProps> = ({bannerType  }) => {
 
   const nextPage = () =>{
     console.log("Wish Result:", wishResult);
-    navigate("/results");
+    navigate("/results", { state: { characterName: wishResult?.itemName, art:`https://genshin.jmp.blue/characters/${wishResult?.itemName}/card` } });
   }
 
 // useEffect(() => {
